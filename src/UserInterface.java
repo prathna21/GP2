@@ -29,6 +29,11 @@ public class UserInterface implements Serializable {
 	private static final int REMOVE_CREDITCARD = 8;
 	private static final int SAVE = 9;
 	private static final int HELP = 10;
+
+	// WORK IN PROGRESS
+	private static final int ADD_EXPENSE = 11;
+	private static final int LIST_ALL_EXPENSES = 12;
+
 	private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static UserInterface userInterface;
 	private static Organization organization;
@@ -78,7 +83,7 @@ public class UserInterface implements Serializable {
 		do {
 			try {
 				int value = Integer.parseInt(getToken("\n| Enter command ('10' Shows all Commands) |"));
-				if (value >= EXIT && value <= HELP) {
+				if (value >= EXIT && value <= LIST_ALL_EXPENSES) {
 					return value;
 				} else {
 					System.out.println("\n- Not a valid Command - Command Values are '1' to '10' -\n");
@@ -167,6 +172,12 @@ public class UserInterface implements Serializable {
 			case HELP:
 				help();
 				break;
+			case ADD_EXPENSE:
+				addExpense();
+				break;
+			case LIST_ALL_EXPENSES:
+				listAllExpenses();
+				break;
 			default:
 				System.out.println("- Please select a VALID option -\n");
 				break;
@@ -219,18 +230,18 @@ public class UserInterface implements Serializable {
 	 */
 	private void listTransactions() {
 		if (yesOrNo("| Would you like to continue to view all the transaction? -") == true) {
-		Iterator result = organization.listAllTransaction();
+			Iterator result = organization.listAllTransaction();
 
-		if (result == null) {
-			System.out.println("\n| There are no transactions to show |\n");
-		} else {
-			System.out.println("\n| Transactions |");
-			while (result.hasNext()) {
-				Transaction transaction = (Transaction) result.next();
-				System.out.println(" - " + transaction.toString());
+			if (result == null) {
+				System.out.println("\n| There are no transactions to show |\n");
+			} else {
+				System.out.println("\n| Transactions |");
+				while (result.hasNext()) {
+					Transaction transaction = (Transaction) result.next();
+					System.out.println(" - " + transaction.toString());
+				}
+				System.out.println("| End of transactions |\n");
 			}
-			System.out.println("| End of transactions |\n");
-		}
 		}
 	}
 
@@ -313,6 +324,24 @@ public class UserInterface implements Serializable {
 		System.out.println(" 3 = Process donation\t\t9 = Save");
 		System.out.println(" 4 = List Transactions\t\t10 = Help");
 		System.out.println(" 5 = List All Donors\n");
+	}
+
+	public void addExpense() {
+		String description = getToken("| Enter a Description |");
+		int expenseAmount = Integer.parseInt(getToken("| Enter expense amount |"));
+
+		String result;
+		result = organization.addExpense(description, expenseAmount);
+		if (result == null) {
+			System.out.println("- Could not add expense -");
+		} else {
+			System.out.println("\n| Expense Successfully Added |");
+		}
+	}
+
+	public void listAllExpenses() {
+		System.out.println("");
+		organization.listAllExpenses();
 	}
 
 	/**

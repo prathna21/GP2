@@ -18,11 +18,12 @@ import java.util.Iterator;
 public class Organization implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private DonorList donorList;
+	private ExpenseList expenseList;
 	private static Organization organization;
-
 
 	public Organization() {
 		donorList = donorList.instance();
+		expenseList = expenseList.instance();
 
 	}
 
@@ -56,7 +57,14 @@ public class Organization implements Serializable {
 			return (donor);
 		}
 		return null;
+	}
 
+	public String addExpense(String description, int expenseAmount) {
+		Expense expense = new Expense(description, expenseAmount);
+		if (expenseList.insertExpense(expense)) {
+			return "Pass";
+		}
+		return null;
 	}
 
 	/**
@@ -114,6 +122,17 @@ public class Organization implements Serializable {
 	 */
 	public void listAllDonors() {
 		Iterator<Donor> it = donorList.getDonor();
+
+		while (it.hasNext()) {
+			System.out.println(it.next());
+		}
+	}
+
+	/**
+	 * Display all the expense's descriptions and amounts in the organization
+	 */
+	public void listAllExpenses() {
+		Iterator<Expense> it = expenseList.getExpenses();
 
 		while (it.hasNext()) {
 			System.out.println(it.next());
