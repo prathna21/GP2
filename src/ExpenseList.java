@@ -35,7 +35,7 @@ public class ExpenseList implements Serializable {
 	}
 
 	public String toString() {
-		return expenses.toString();
+		return "\n" + expenses.toString();
 	}
 
 }

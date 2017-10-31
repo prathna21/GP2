@@ -7,8 +7,13 @@
  * Some codes where from Class Project 1 written by @author Brahma Dathan and Sarnath Ramnath
  */
 
-import java.io.*;
-import java.util.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Iterator;
 
 public class Organization implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,7 +24,6 @@ public class Organization implements Serializable {
 	public Organization() {
 		donorList = donorList.instance();
 		expenseList = expenseList.instance();
-
 	}
 
 	/**
@@ -77,10 +81,6 @@ public class Organization implements Serializable {
 		CreditCard card = new CreditCard(donorID, creditCard, amount);
 		return card;
 	}
-	public BankAccount addBankAccount(String donorID, String bankAccount, int amount) {
-        BankAccount bank = new BankAccount(donorID, bankAccount, amount);
-        return bank;
-    }
 
 	/**
 	 * Process the donation for each donor that has a credit card or multiple credit
@@ -131,10 +131,19 @@ public class Organization implements Serializable {
 	 * Display all the expense's descriptions and amounts in the organization
 	 */
 	public void listAllExpenses() {
+		boolean showList = false;
 		Iterator<Expense> it = expenseList.getExpenses();
 
-		while (it.hasNext()) {
-			System.out.println(it.next());
+		if (it.hasNext()) {
+			showList = true;
+		}
+
+		if (showList) {
+			while (it.hasNext()) {
+				System.out.println(it.next());
+			}
+		} else {
+			System.out.println("| No Expenses to Show |");
 		}
 	}
 
@@ -152,9 +161,7 @@ public class Organization implements Serializable {
 			System.out.println("\n- No such member -");
 			return;
 		}
-
 		donor.getCardsIssued();
-		donor.getBanksIssued();
 
 	}
 
@@ -183,6 +190,16 @@ public class Organization implements Serializable {
 	 *            The credit card number of donor
 	 * @return True when credit card has been removed
 	 */
+
+	public boolean removeBankAccount(String donorID, String bankAccount) {
+		Donor donor = donorList.searchDonor(donorID);
+		if (donor == null) {
+			System.out.println("\n- No such member -");
+			return false;
+		}
+		return donor.removeBankAccount(donorID, bankAccount);
+	}
+
 	public boolean removeCreditCard(String donorID, String cardNumber) {
 		Donor donor = donorList.searchDonor(donorID);
 		if (donor == null) {
@@ -191,15 +208,6 @@ public class Organization implements Serializable {
 		}
 		return donor.removeCreditCard(donorID, cardNumber);
 	}
-
-	public boolean removeBankAccount(String donorID, String bankAccount) {
-        Donor donor = donorList.searchDonor(donorID);
-        if (donor == null) {
-            System.out.println("\n- No such member -");
-            return false;
-        }
-        return donor.removeBankAccount(donorID, bankAccount);
-    }
 
 	/**
 	 * Search for selected donor

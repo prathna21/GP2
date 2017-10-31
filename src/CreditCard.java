@@ -7,7 +7,7 @@
  * Some codes where from Class Project 1 written by @author Brahma Dathan and Sarnath Ramnath
  */
 
-import java.io.*;
+import java.io.Serializable;
 
 /**
  * This class holds and manages the information of all credit card information
@@ -17,7 +17,7 @@ public class CreditCard implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String donorId;
 	private String creditCard;
-	private int cardAmount;
+	private int amount;
 
 
 	/**
@@ -36,7 +36,7 @@ public class CreditCard implements Serializable {
 
 		this.donorId = donorId;
 		this.creditCard = creditCard;
-		this.cardAmount = amount;
+		this.amount = amount;
 	}
 
 	/**
@@ -81,8 +81,8 @@ public class CreditCard implements Serializable {
 	 *
 	 * @return Payment donor pays per cycle
 	 */
-	public int getCardAmount() {
-		return cardAmount;
+	public int getAmount() {
+		return amount;
 	}
 
 	/**
@@ -102,6 +102,6 @@ public class CreditCard implements Serializable {
 	 */
 	public String toString() {
 		return "\n| Credit Card Info |\nDonor ID: " + getDonorId()
-				+ "\nCredit Card: " + creditCard + "\nPayment Rate: " + cardAmount + "\n-------------------------";
+				+ "\nCredit Card: " + creditCard + "\nPayment Rate: " + amount + "\n-------------------------";
 	}
 }
