@@ -7,13 +7,8 @@
  * Some codes where from Class Project 1 written by @author Brahma Dathan and Sarnath Ramnath
  */
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Iterator;
+import java.io.*;
+import java.util.*;
 
 public class Organization implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -81,7 +76,10 @@ public class Organization implements Serializable {
 		CreditCard card = new CreditCard(donorID, creditCard, amount);
 		return card;
 	}
-
+	public BankAccount addBankAccount(String donorID, String bankAccount, int amount) {
+        BankAccount bank = new BankAccount(donorID, bankAccount, amount);
+        return bank;
+    }
 	/**
 	 * Process the donation for each donor that has a credit card or multiple credit
 	 * cards with amount. The total amount will be displayed.
@@ -162,7 +160,7 @@ public class Organization implements Serializable {
 			return;
 		}
 		donor.getCardsIssued();
-
+		donor.getBanksIssued();
 	}
 
 	/**

@@ -6,11 +6,8 @@
  * @author Dat Huynh
  * Some codes where from Class Project 1 written by @author Brahma Dathan and Sarnath Ramnath
  */
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.io.*;
+import java.util.*;
 
 /**
  * Donor object, each donor have a name and phone number
@@ -53,7 +50,12 @@ public class Donor implements Serializable {
 		}
 		return false;
 	}
-
+	public boolean issue(BankAccount card) {
+        if (banks.add(card)) {
+            return true;
+        }
+        return false;
+    }
 	/**
 	 * Remove credit card issued to the donor
 	 *
@@ -97,7 +99,7 @@ public class Donor implements Serializable {
 	/**
 	 * This method will remove all transactions associated with a removed Donor
 	 * object
-	 * 
+	 *
 	 */
 	public void removeTransaction() {
 		Iterator<CreditCard> it = cards.iterator();
@@ -126,7 +128,7 @@ public class Donor implements Serializable {
 
 		for (Iterator<CreditCard> iterator = cards.iterator(); iterator.hasNext();) {
 			CreditCard card = iterator.next();
-			string += "   - CreditCard: " + card.getCreditCard() + " | $" + card.getAmount() + "|\n";
+			string += "   - CreditCard: " + card.getCreditCard() + " | $" + card.getCardAmount() + "|\n";
 
 		}
 
@@ -134,10 +136,24 @@ public class Donor implements Serializable {
 		System.out.println(string);
 		return (cards.listIterator());
 	}
+	public Iterator<BankAccount> getBanksIssued() {
+
+        String string = "| Donor Name: " + name + " | ID: " + id + " | Phone: " + phone + " |\n";
+
+        for (Iterator<BankAccount> iterator = banks.iterator(); iterator.hasNext();) {
+            BankAccount bank = iterator.next();
+            string += "   - Bank Account: " + bank.getBankAccount() + " | $" + bank.getBankAmount() + "|\n";
+
+        }
+
+        toString();
+        System.out.println(string);
+        return (banks.listIterator());
+    }
 
 	/**
 	 * Gets an iterator to a collection of selected transactions
-	 * 
+	 *
 	 * @return The iterator to the collection
 	 */
 	public Iterator<Transaction> getTransactions() {
@@ -229,13 +245,18 @@ public class Donor implements Serializable {
 	 * @return Total amount process
 	 */
 	public double processDonations() {
-		double total = 0;
-		for (Iterator<CreditCard> cardIterator = getCardsIssued(); cardIterator.hasNext();) {
-			CreditCard card = cardIterator.next();
-			transactions.add(new Transaction(card.getCreditCard(), card.getAmount()));
-			total += card.getAmount();
-		}
+        double total = 0;
+        for (Iterator<CreditCard> cardIterator = getCardsIssued(); cardIterator.hasNext();) {
+            CreditCard card = cardIterator.next();
+            transactions.add(new Transaction(card.getCreditCard(), card.getCardAmount()));
+            total += card.getCardAmount();
+        }
+        for (Iterator<BankAccount> bankIterator = getBanksIssued(); bankIterator.hasNext();) {
+            BankAccount card = bankIterator.next();
+            transactions.add(new Transaction(card.getBankAccount(), card.getBankAmount()));
+            total += card.getBankAmount();
+        }
 
-		return total;
-	}
+        return total;
+    }
 }

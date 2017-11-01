@@ -6,12 +6,8 @@
  * @author Dat Huynh
  * Some codes where from Class Project 1 written by @author Brahma Dathan and Sarnath Ramnath
  */
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 /**
  * This is the user interface of the Organization
@@ -20,7 +16,7 @@ public class UserInterface implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final int EXIT = 0;
 	private static final int ADD_DONOR = 1;
-	private static final int ADD_CREDITCARD = 2;
+	private static final int ADD_PAYMENT = 2;
 	private static final int PROCESS_DONATION = 3;
 	private static final int LIST_TRANSACTION = 4;
 	private static final int LIST_ALL_DONORS = 5;
@@ -38,6 +34,7 @@ public class UserInterface implements Serializable {
 	private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static UserInterface userInterface;
 	private static Organization organization;
+	private int currentBalance;
 
 	/**
 	 * Made private for singleton pattern. Conditionally looks for any saved data.
@@ -137,7 +134,7 @@ public class UserInterface implements Serializable {
 	 *
 	 */
 	public void process() {
-		System.out.println("\n| Enter in a number from 0-10 (Enter in 10 for a list of commands) |");
+		System.out.println("\n| Enter in a number from 0-15 (Enter in 15 for a list of commands) |");
 		int command;
 		help();
 
@@ -146,8 +143,8 @@ public class UserInterface implements Serializable {
 			case ADD_DONOR:
 				addDonor();
 				break;
-			case ADD_CREDITCARD:
-				addCreditCard();
+			case ADD_PAYMENT:
+				addAccountType();
 				break;
 			case PROCESS_DONATION:
 				processDonations();
@@ -205,6 +202,11 @@ public class UserInterface implements Serializable {
 		organization.removeCreditCard(donorID, cardNumber);
 	}
 
+	public void removeBankAccount() {
+        String donorID = getToken("| Enter Donor ID |");
+        String bankAccount = getToken("| Enter Bank Account |");
+        organization.removeBankAccount(donorID, bankAccount);
+    }
 	/**
 	 * Remove select donor by searching for donor ID
 	 */
@@ -275,24 +277,50 @@ public class UserInterface implements Serializable {
 	/**
 	 *
 	 */
-	public void addCreditCard() {
-		String donorID = getToken("| Enter Donor ID |");
-		if (organization.searchDonor(donorID) == null) {
-			System.out.println("- No such member -");
-			return;
-		}
-		String Cardnumber = getToken("| Enter Card Number |");
-		int amount = Integer.parseInt(getToken("| Enter amount |"));
+	 public void addAccountType() {
+	        String donorID = getToken("| Enter Donor ID |");
+	        if ( organization.searchDonor(donorID) == null ) {
+	            System.out.println("- No such member -");
+	            return;
+	        }
+	        String type = getToken("| Enter \"c\" for Credit Card |\n| Enter \"b\" for Bank Account |");
 
-		CreditCard card;
-		card = organization.addCreditCard(donorID, Cardnumber, amount);
-		if (card != null) {
-			organization.searchDonor(donorID).issue(card);
-			System.out.println(card);
-		} else {
-			System.out.println("- Credit card could not be added -");
-		}
-	}
+	        switch ( type ) {
+	            case "c":
+	                String cardNumber = getToken("| Enter Card Number |");
+	                int cardAmount = Integer.parseInt(getToken("| Enter amount |"));
+
+	                CreditCard card;
+	                card =
+	                    organization.addCreditCard(donorID, cardNumber, cardAmount);
+	                if ( card != null ) {
+	                    organization.searchDonor(donorID).issue(card);
+	                    System.out.println(card);
+	                } else {
+	                    System.out.println("- Credit card could not be added -");
+	                }
+	                break;
+	            case "b":
+	                String bankAccount = getToken("| Enter Bank Account |");
+	                int bankAmount = Integer.parseInt(getToken("| Enter amount |"));
+
+	                BankAccount bank;
+	                bank =
+	                    organization.addBankAccount(donorID, bankAccount,
+	                        bankAmount);
+	                if ( bank != null ) {
+	                    organization.searchDonor(donorID).issue(bank);
+	                    System.out.println(bank);
+	                } else {
+	                    System.out.println("- Bank Account could not be added -");
+	                }
+	                break;
+	            default:
+	                System.out.println("- Please select a VALID option -\n");
+	                break;
+	        }
+
+	    }
 
 	/**
 	 * Process the donation for each donor that has a credit card or multiple credit
@@ -322,11 +350,6 @@ public class UserInterface implements Serializable {
 		organization.listAllExpenses();
 	}
 
-	public void removeBankAccount() {
-		String donorID = getToken("| Enter Donor ID |");
-		String bankAccount = getToken("| Enter Bank Account |");
-		organization.removeBankAccount(donorID, bankAccount);
-	}
 
 	public void organizationInfo() {
 		System.out.println("- NOT IMPLEMENTED -");
@@ -361,13 +384,13 @@ public class UserInterface implements Serializable {
 	 */
 	public void help() {
 		System.out.println(" 0 = Exit the application\t8 = Remove Credit Card");
-		System.out.println(" 1 = Add a Donor\t\t\t9 = Remove Bank Account");
+		System.out.println(" 1 = Add a Donor\t\t9 = Remove Bank Account");
 		System.out.println(" 2 = Add a Payment Method\t10 = Add Expenses");
 		System.out.println(" 3 = Process Donation\t\t11 = View Organization Info");
 		System.out.println(" 4 = List Transactions\t\t12 = List Payment Method Info");
 		System.out.println(" 5 = List All Donors\t\t13 = List All Expenses");
 		System.out.println(" 6 = List a Specific Donor\t14 = Save");
-		System.out.println(" 7 = Remove Donor\t\t\t15 = Help");
+		System.out.println(" 7 = Remove Donor\t\t15 = Help");
 	}
 
 	/**
