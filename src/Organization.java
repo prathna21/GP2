@@ -114,6 +114,20 @@ public class Organization implements Serializable {
 		}
 	}
 
+	public Iterator listPaymentInfo(int threshold) {
+	    int counter = 0;
+        if (donorList.getList() != null&& counter<threshold) {
+            Iterator<Donor> result = donorList.getList().iterator();
+            while (result.hasNext()) {
+                result.next().listPaymentInfo(threshold);
+
+            }
+            return result;
+        } else {
+            return null;
+        }
+    }
+
 	/**
 	 * Display all the donor name and phone number in the organization
 	 */
@@ -159,8 +173,7 @@ public class Organization implements Serializable {
 			System.out.println("\n- No such member -");
 			return;
 		}
-		donor.getCardsIssued();
-		donor.getBanksIssued();
+		donor.getAccountIssued();
 	}
 
 	/**

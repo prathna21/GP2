@@ -108,7 +108,7 @@ public class Donor implements Serializable {
 			Iterator<Transaction> iter = transactions.iterator();
 			while (iter.hasNext()) {
 				Transaction transaction = iter.next();
-				if (obj.getCreditCard().equals(transaction.getCreditCard())) {
+				if (obj.getCreditCard().equals(transaction.getPaymentNumber())) {
 					transactions.remove(transaction);
 				}
 			}
@@ -122,28 +122,30 @@ public class Donor implements Serializable {
 	 *
 	 * @return Iterator to the collection of issued cards
 	 */
+	public void getAccountIssued(){
+	    String string = "| Donor Name: " + name + " | ID: " + id + " | Phone: " + phone + " |\n";
+	    getCardsIssued();
+	    getBanksIssued();
+	}
 	public Iterator<CreditCard> getCardsIssued() {
 
-		String string = "| Donor Name: " + name + " | ID: " + id + " | Phone: " + phone + " |\n";
+		String string ="";
 
 		for (Iterator<CreditCard> iterator = cards.iterator(); iterator.hasNext();) {
 			CreditCard card = iterator.next();
 			string += "   - CreditCard: " + card.getCreditCard() + " | $" + card.getCardAmount() + "|\n";
-
 		}
-
 		toString();
 		System.out.println(string);
 		return (cards.listIterator());
 	}
 	public Iterator<BankAccount> getBanksIssued() {
 
-        String string = "| Donor Name: " + name + " | ID: " + id + " | Phone: " + phone + " |\n";
+        String string = "";
 
         for (Iterator<BankAccount> iterator = banks.iterator(); iterator.hasNext();) {
             BankAccount bank = iterator.next();
             string += "   - Bank Account: " + bank.getBankAccount() + " | $" + bank.getBankAmount() + "|\n";
-
         }
 
         toString();
@@ -166,10 +168,16 @@ public class Donor implements Serializable {
 		return it;
 	}
 
-	// public Iterator<Transaction> getTransactions() {
-	// return transactions.iterator();
-	//
-	// }
+	public Iterator<Transaction> listPaymentInfo(int threshold) {
+	    int counter = 0;
+        Iterator<Transaction> it = transactions.iterator();
+        while (it.hasNext()&&counter<threshold) {
+            Transaction obj = it.next();
+            System.out.println(obj);
+            counter+=obj.getAmount();
+        }
+        return it;
+    }
 
 	/**
 	 * Getter for name
@@ -248,12 +256,12 @@ public class Donor implements Serializable {
         double total = 0;
         for (Iterator<CreditCard> cardIterator = getCardsIssued(); cardIterator.hasNext();) {
             CreditCard card = cardIterator.next();
-            transactions.add(new Transaction(card.getCreditCard(), card.getCardAmount()));
+            transactions.add(new Transaction("Credit Card", card.getCreditCard(), card.getCardAmount()));
             total += card.getCardAmount();
         }
         for (Iterator<BankAccount> bankIterator = getBanksIssued(); bankIterator.hasNext();) {
             BankAccount card = bankIterator.next();
-            transactions.add(new Transaction(card.getBankAccount(), card.getBankAmount()));
+            transactions.add(new Transaction("Bank Account", card.getBankAccount(), card.getBankAmount()));
             total += card.getBankAmount();
         }
 
