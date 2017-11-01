@@ -168,14 +168,8 @@ public class Donor implements Serializable {
 		return it;
 	}
 
-	public Iterator<Transaction> listPaymentInfo(int threshold) {
-	    int counter = 0;
+	public Iterator<Transaction> listPaymentInfo() {
         Iterator<Transaction> it = transactions.iterator();
-        while (it.hasNext()&&counter<threshold) {
-            Transaction obj = it.next();
-            System.out.println(obj);
-            counter+=obj.getAmount();
-        }
         return it;
     }
 

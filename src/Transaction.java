@@ -37,6 +37,9 @@ public class Transaction implements Serializable {
         date.setTimeInMillis(System.currentTimeMillis());
 
     }
+    public String getType(){
+        return type;
+    }
 
     /**
      * Returns the credit card field

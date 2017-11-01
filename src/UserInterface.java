@@ -361,21 +361,39 @@ public class UserInterface implements Serializable {
     }
 
     private void listPaymentInfo() {
-        int counter=0;
+        int creditCardCounter = 0;
+        int bankAccountCounter = 0;
+        String creditCard = "";
+        String bankAccount = "";
         int threshold = Integer.parseInt(getToken("| Enter an threshold |"));
-        Iterator result = organization.listPaymentInfo(threshold);
+        Iterator result = organization.listPaymentInfo();
 
 
         if ( result == null ) {
             System.out.println("\n| There are no transactions to show |\n");
         } else {
-            System.out.println("\n| Transactions |");
-            while ( result.hasNext() && counter<threshold) {
-                Transaction transaction = (Transaction) result.next();
-                System.out.println(" - " + transaction.toString());
-                counter+=transaction.getAmount();
-                System.out.println(counter);
+            System.out.println("\n| Transactions |\n");
+            while ( result.hasNext() ) {
+                Iterator<Transaction> interator =
+                    ((Donor) result.next()).listPaymentInfo();
+                while ( interator.hasNext() ) {
+                    Transaction transaction = interator.next();
+                    if ( transaction.getType().equals("Credit Card") ) {
+                        creditCardCounter = transaction.getAmount();
+                        if ( creditCardCounter <= threshold ) {
+                            creditCard += transaction.toString() + "\n";
+                        }
+                    } else {
+                        bankAccountCounter = transaction.getAmount();
+                        if ( bankAccountCounter <= threshold ) {
+                            bankAccount += transaction.toString() + "\n";
+                        }
+                    }
+                }
             }
+
+            System.out.println(creditCard);
+            System.out.println(bankAccount);
             System.out.println("| End of transactions |\n");
         }
 
