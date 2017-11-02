@@ -361,8 +361,8 @@ public class UserInterface implements Serializable {
     }
 
     private void listPaymentInfo() {
-        int creditCardCounter = 0;
-        int bankAccountCounter = 0;
+        int creditCardAmount = 0;
+        int bankAccountAmount = 0;
         String creditCard = "";
         String bankAccount = "";
         int threshold = Integer.parseInt(getToken("| Enter an threshold |"));
@@ -373,19 +373,21 @@ public class UserInterface implements Serializable {
             System.out.println("\n| There are no transactions to show |\n");
         } else {
             System.out.println("\n| Transactions |\n");
+
             while ( result.hasNext() ) {
-                Iterator<Transaction> interator =
+                Iterator<Transaction> iterator =
                     ((Donor) result.next()).listPaymentInfo();
-                while ( interator.hasNext() ) {
-                    Transaction transaction = interator.next();
+
+                while ( iterator.hasNext() ) {
+                    Transaction transaction = iterator.next();
                     if ( transaction.getType().equals("Credit Card") ) {
-                        creditCardCounter = transaction.getAmount();
-                        if ( creditCardCounter <= threshold ) {
+                        creditCardAmount = transaction.getAmount();
+                        if ( creditCardAmount <= threshold ) {
                             creditCard += transaction.toString() + "\n";
                         }
                     } else {
-                        bankAccountCounter = transaction.getAmount();
-                        if ( bankAccountCounter <= threshold ) {
+                        bankAccountAmount = transaction.getAmount();
+                        if ( bankAccountAmount <= threshold ) {
                             bankAccount += transaction.toString() + "\n";
                         }
                     }

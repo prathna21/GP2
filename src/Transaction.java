@@ -20,6 +20,7 @@ public class Transaction implements Serializable {
     private String paymentNumber;
     private int amount;
     private String type;
+    private int totalAmount;
 
     /**
      * Creates the transaction with a given credit card and amount donated. The date is the current
@@ -32,6 +33,7 @@ public class Transaction implements Serializable {
     public Transaction(String type, String paymentNumber, int amount) {
         this.paymentNumber = paymentNumber;
         this.amount = amount;
+        this.setTotalAmount(amount);
         this.type = type;
         date = new GregorianCalendar();
         date.setTimeInMillis(System.currentTimeMillis());
@@ -98,5 +100,11 @@ public class Transaction implements Serializable {
                 amount + "\t| Date: " + getDate());
         }
 
+    }
+    public int getTotalAmount() {
+        return totalAmount;
+    }
+    public void setTotalAmount(int totalAmount) {
+        this.totalAmount = totalAmount;
     }
 }
