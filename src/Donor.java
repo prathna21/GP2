@@ -256,27 +256,14 @@ public class Donor implements Serializable {
      */
     public double processDonations() {
         double total = 0;
-        for ( Iterator<CreditCard> cardIterator = getCardsIssued(); cardIterator
-            .hasNext(); ) {
+        for (Iterator<CreditCard> cardIterator = getCardsIssued(); cardIterator.hasNext();) {
             CreditCard card = cardIterator.next();
-            while ( getTransactions().hasNext() ) {
-                Transaction test = getTransactions().next();
-                if ( card.equals(test) ) {
-                    test.setAmount(card.getCardAmount());
-                    total += card.getCardAmount();
-                } else {
-                    transactions.add(new Transaction("Credit Card", card
-                        .getCreditCard(), card.getCardAmount()));
-                    total += card.getCardAmount();
-                }
-            }
-
+            transactions.add(new Transaction("Credit Card", card.getCreditCard(), card.getCardAmount()));
+            total += card.getCardAmount();
         }
-        for ( Iterator<BankAccount> bankIterator = getBanksIssued(); bankIterator
-            .hasNext(); ) {
+        for (Iterator<BankAccount> bankIterator = getBanksIssued(); bankIterator.hasNext();) {
             BankAccount card = bankIterator.next();
-            transactions.add(new Transaction("Bank Account", card
-                .getBankAccount(), card.getBankAmount()));
+            transactions.add(new Transaction("Bank Account", card.getBankAccount(), card.getBankAmount()));
             total += card.getBankAmount();
         }
 
