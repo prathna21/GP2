@@ -2,7 +2,8 @@
  * @author Sammy Yang
  * @author TsengCyen Yang
  * @author Prathna Ung
- * @author Dat Huynh Some codes where from Class Project 1 written by @author Brahma Dathan and
+ * @author Dat Huynh
+ * Some codes where from Class Project 1 written by @author Brahma Dathan and
  *         Sarnath Ramnath
  */
 
@@ -14,6 +15,8 @@ public class Organization implements Serializable {
     private DonorList donorList;
     private ExpenseList expenseList;
     private static Organization organization;
+    private int totalDonated = 0;
+    private int totalExpense = 0;
 
     public Organization() {
         donorList = donorList.instance();
@@ -50,12 +53,19 @@ public class Organization implements Serializable {
         return null;
     }
 
-    public String addExpense(String description, int expenseAmount) {
+    public int addExpense(String description, int expenseAmount) {
         Expense expense = new Expense(description, expenseAmount);
         if ( expenseList.insertExpense(expense) ) {
-            return "Pass";
+            setTotalExpense(expenseAmount);
+            return expenseAmount;
+        } else {
+            return 0;
         }
-        return null;
+    }
+
+    public int organizationInfo() {
+
+        return getTotalDonated() - getTotalExpense();
     }
 
     /**
@@ -95,6 +105,7 @@ public class Organization implements Serializable {
         }
         System.out.println("| The total amount of donations is : " + total +
             " |");
+        setTotalDonated(total);
     }
 
     /**
@@ -137,21 +148,17 @@ public class Organization implements Serializable {
     /**
      * Display all the expense's descriptions and amounts in the organization
      */
-    public void listAllExpenses() {
-        boolean showList = false;
-        Iterator<Expense> it = expenseList.getExpenses();
-
-        if ( it.hasNext() ) {
-            showList = true;
+    public boolean listAllExpenses() {
+        if ( donorList.getList() != null ) {
+            Iterator<Expense> it = expenseList.getExpenses();
+            System.out.println("| List of All Expense |");
+                while ( it.hasNext() ) {
+                    System.out.println(it.next());
+                }
+            return true;
         }
+        return false;
 
-        if ( showList ) {
-            while ( it.hasNext() ) {
-                System.out.println(it.next());
-            }
-        } else {
-            System.out.println("| No Expenses to Show |");
-        }
     }
 
     /**
@@ -276,6 +283,22 @@ public class Organization implements Serializable {
             cnfe.printStackTrace();
             return null;
         }
+    }
+
+    public int getTotalDonated() {
+        return totalDonated;
+    }
+
+    public void setTotalDonated(int totalDonated) {
+        this.totalDonated += totalDonated;
+    }
+
+    public int getTotalExpense() {
+        return totalExpense;
+    }
+
+    public void setTotalExpense(int totalExpense) {
+        this.totalExpense += totalExpense;
     }
 
 }

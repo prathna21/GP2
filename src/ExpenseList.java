@@ -1,7 +1,5 @@
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class ExpenseList implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -24,17 +22,20 @@ public class ExpenseList implements Serializable {
 		expenses.add(expense);
 		return true;
 	}
-
+	public List<Expense> getList() {
+        if (expenses.isEmpty()) {
+            return null;
+        } else {
+            return expenses;
+        }
+    }
 	public Iterator<Expense> getExpenses() {
 		Iterator<Expense> it = expenses.iterator();
-		while (it.hasNext()) {
-			Expense obj = it.next();
-			System.out.println(obj);
-		}
 		return it;
 	}
 
-	public String toString() {
+	@Override
+    public String toString() {
 		return "\n" + expenses.toString();
 	}
 

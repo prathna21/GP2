@@ -2,7 +2,8 @@
  * @author Sammy Yang
  * @author TsengCyen Yang
  * @author Prathna Ung
- * @author Dat Huynh Some codes where from Class Project 1 written by @author Brahma Dathan and
+ * @author Dat Huynh
+ * Some codes where from Class Project 1 written by @author Brahma Dathan and
  *         Sarnath Ramnath
  */
 import java.io.*;
@@ -342,9 +343,9 @@ public class UserInterface implements Serializable {
         int expenseAmount =
             Integer.parseInt(getToken("| Enter expense amount |"));
 
-        String result;
+        int result;
         result = organization.addExpense(description, expenseAmount);
-        if ( result == null ) {
+        if ( result == 0 ) {
             System.out.println("- Could not add expense -");
         } else {
             System.out.println("\n| Expense Successfully Added |");
@@ -352,12 +353,17 @@ public class UserInterface implements Serializable {
     }
 
     public void listAllExpenses() {
-        System.out.println("");
-        organization.listAllExpenses();
+        if(organization.listAllExpenses()==false){
+            System.out.println("\n| No Expense Listed |");
+        }else{
+            System.out.println("\n| End of Expense List |");
+        }
     }
 
     public void organizationInfo() {
-        System.out.println("- NOT IMPLEMENTED -");
+        System.out.println("Total Donated: $" + organization.getTotalDonated());
+        System.out.println("Total Expense: $" + organization.getTotalExpense());
+        System.out.println("Total Balance: $" + organization.organizationInfo());
     }
 
     private void listPaymentInfo() {
@@ -367,7 +373,6 @@ public class UserInterface implements Serializable {
         String bankAccount = "";
         int threshold = Integer.parseInt(getToken("| Enter an threshold |"));
         Iterator result = organization.listPaymentInfo();
-
 
         if ( result == null ) {
             System.out.println("\n| There are no transactions to show |\n");

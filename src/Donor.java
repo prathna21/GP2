@@ -2,7 +2,8 @@
  * @author Sammy Yang
  * @author TsengCyen Yang
  * @author Prathna Ung
- * @author Dat Huynh Some codes where from Class Project 1 written by @author Brahma Dathan and
+ * @author Dat Huynh
+ * Some codes where from Class Project 1 written by @author Brahma Dathan and
  *         Sarnath Ramnath
  */
 import java.io.*;
@@ -256,14 +257,18 @@ public class Donor implements Serializable {
      */
     public double processDonations() {
         double total = 0;
-        for (Iterator<CreditCard> cardIterator = getCardsIssued(); cardIterator.hasNext();) {
+        for ( Iterator<CreditCard> cardIterator = getCardsIssued(); cardIterator
+            .hasNext(); ) {
             CreditCard card = cardIterator.next();
-            transactions.add(new Transaction("Credit Card", card.getCreditCard(), card.getCardAmount()));
+            transactions.add(new Transaction("Credit Card", card
+                .getCreditCard(), card.getCardAmount()));
             total += card.getCardAmount();
         }
-        for (Iterator<BankAccount> bankIterator = getBanksIssued(); bankIterator.hasNext();) {
+        for ( Iterator<BankAccount> bankIterator = getBanksIssued(); bankIterator
+            .hasNext(); ) {
             BankAccount card = bankIterator.next();
-            transactions.add(new Transaction("Bank Account", card.getBankAccount(), card.getBankAmount()));
+            transactions.add(new Transaction("Bank Account", card
+                .getBankAccount(), card.getBankAmount()));
             total += card.getBankAmount();
         }
 

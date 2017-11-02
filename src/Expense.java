@@ -1,4 +1,4 @@
-import java.io.Serializable;
+import java.io.*;
 
 public class Expense implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -26,7 +26,9 @@ public class Expense implements Serializable {
 		this.expenseAmount = expenseAmount;
 	}
 
-	public String toString() {
+	@Override
+    public String toString() {
 		return "\nDescription: " + description + "\nExpense Amount: " + expenseAmount;
+
 	}
 }
