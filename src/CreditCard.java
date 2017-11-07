@@ -7,22 +7,23 @@
  * Some codes where from Class Project 1 written by @author Brahma Dathan and Sarnath Ramnath
  */
 
-import java.io.*;
+import java.io.Serializable;
 
 /**
  * This class holds and manages the information of all credit card information
  * for the Organization
  */
-public class CreditCard implements Serializable {
+public class CreditCard implements Serializable, Visitable {
 	private static final long serialVersionUID = 1L;
 	private String donorId;
 	private String creditCard;
 	private int cardAmount;
+	private int timesProcessed = 0;
 
 
 	/**
 	 * This constructor sets the default values for general credit card information
-	 * assuming user defines all 4 variables
+	 * assuming user defines all 3 variables
 	 *
 	 * @param donorId
 	 *            Donor's ID number
@@ -103,5 +104,32 @@ public class CreditCard implements Serializable {
 	public String toString() {
 		return "\n| Credit Card Info |\nDonor ID: " + getDonorId()
 				+ "\nCredit Card: " + creditCard + "\nPayment Rate: " + cardAmount + "\n-------------------------";
+	}
+
+	/**
+	 * The method will keep track of how many times the card was processed
+	 * 
+	 * @param processed The amount of times processed
+	 */
+	public void setTimesProcessed(int processed) {
+		timesProcessed = processed;
+	}
+
+	/**
+	 * This method will return the amount of times the card was processed
+	 */
+	public int getTimesProcessed() {
+		return timesProcessed;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see Visitable#accept(Visitor)
+	 */
+	@Override
+	public void accept(Visitor visitor) {
+		visitor.visit(this);
+
 	}
 }

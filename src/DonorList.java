@@ -21,12 +21,13 @@ public class DonorList implements Serializable {
 	private List<Donor> donors = new LinkedList<Donor>();
 
 	/**
-	 * Private constructor for singleton pattern
+	 *  constructor for singleton pattern
 	 *
 	 */
 	public DonorList() {
 
 	}
+
 
 	/**
 	 * Supports the singleton pattern
@@ -72,9 +73,9 @@ public class DonorList implements Serializable {
 	}
 
 	/**
-	 * Get list of donor into the collection
+	 * Get list of donor of the collection
 	 *
-	 * @return String of donors.
+	 * @return Iterator of donors.
 	 */
 	public Iterator<Donor> getDonor() {
 		Iterator<Donor> it = donors.iterator();
@@ -107,7 +108,7 @@ public class DonorList implements Serializable {
 		for (Iterator<Donor> iterator = donors.iterator(); iterator.hasNext();) {
 			Donor donor = iterator.next();
 			if (donor.getId().equals(donorId)) {
-				donor.removeTransaction();
+				//donor.removeTransaction();
 				donors.remove(donor);
 				System.out.println("\n- Donor: "+donorId+" was successfully removed -");
 

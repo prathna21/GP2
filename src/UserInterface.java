@@ -1,3 +1,4 @@
+
 /**
  * @author Sammy Yang
  * @author TsengCyen Yang
@@ -6,8 +7,12 @@
  * Some codes where from Class Project 1 written by @author Brahma Dathan and
  *         Sarnath Ramnath
  */
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
 /**
  * This is the user interface of the Organization
@@ -206,7 +211,9 @@ public class UserInterface implements Serializable {
         String cardNumber = getToken("| Enter Card Number |");
         organization.removeCreditCard(donorID, cardNumber);
     }
-
+    /**
+     * Remove bank account selected if donor has one by searching for donor and bank account number
+     */
     public void removeBankAccount() {
         String donorID = getToken("| Enter Donor ID |");
         String bankAccount = getToken("| Enter Bank Account |");
@@ -280,7 +287,8 @@ public class UserInterface implements Serializable {
     }
 
     /**
-	 *
+	 * set the account type "c" for credit card and "b" for bank account 
+	 * 
 	 */
     public void addAccountType() {
         String donorID = getToken("| Enter Donor ID |");
@@ -337,7 +345,9 @@ public class UserInterface implements Serializable {
             organization.processDonation();
         }
     }
-
+    /**
+     * add the expense and amount to expense list
+     */
     public void addExpense() {
         String description = getToken("| Enter an Expense Description |");
         int expenseAmount =
@@ -351,7 +361,9 @@ public class UserInterface implements Serializable {
             System.out.println("\n| Expense Successfully Added |");
         }
     }
-
+    /**
+     * show a list of all expense
+     */
     public void listAllExpenses() {
         if(organization.listAllExpenses()==false){
             System.out.println("\n| No Expense Listed |");
@@ -359,51 +371,26 @@ public class UserInterface implements Serializable {
             System.out.println("\n| End of Expense List |");
         }
     }
-
+    /**
+     * show the total amount donated and the expense total
+     * then the balance will be display( total donated - total expense)
+     */
     public void organizationInfo() {
         System.out.println("Total Donated: $" + organization.getTotalDonated());
         System.out.println("Total Expense: $" + organization.getTotalExpense());
         System.out.println("Total Balance: $" + organization.organizationInfo());
     }
-
+    /**
+     * show all credit card and bank account that exist and the amount of time that 
+     * it has been process
+     */
     private void listPaymentInfo() {
-        int creditCardAmount = 0;
-        int bankAccountAmount = 0;
-        String creditCard = "";
-        String bankAccount = "";
-        int threshold = Integer.parseInt(getToken("| Enter an threshold |"));
-        Iterator result = organization.listPaymentInfo();
-
-        if ( result == null ) {
-            System.out.println("\n| There are no transactions to show |\n");
-        } else {
-            System.out.println("\n| Transactions |\n");
-
-            while ( result.hasNext() ) {
-                Iterator<Transaction> iterator =
-                    ((Donor) result.next()).listPaymentInfo();
-
-                while ( iterator.hasNext() ) {
-                    Transaction transaction = iterator.next();
-                    if ( transaction.getType().equals("Credit Card") ) {
-                        creditCardAmount = transaction.getAmount();
-                        if ( creditCardAmount <= threshold ) {
-                            creditCard += transaction.toString() + "\n";
-                        }
-                    } else {
-                        bankAccountAmount = transaction.getAmount();
-                        if ( bankAccountAmount <= threshold ) {
-                            bankAccount += transaction.toString() + "\n";
-                        }
-                    }
-                }
-            }
-
-            System.out.println(creditCard);
-            System.out.println(bankAccount);
-            System.out.println("| End of transactions |\n");
-        }
-
+		int creditCardAmount = 0;
+		int bankAccountAmount = 0;
+		String creditCard = "";
+		String bankAccount = "";
+		int threshold = Integer.parseInt(getToken("| Enter an threshold |"));
+		organization.listPaymentInfo(threshold);
     }
 
     /**
